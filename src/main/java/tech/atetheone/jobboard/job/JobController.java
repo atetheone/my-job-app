@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
 /*
   * This class is a controller that handles HTTP requests for the Job entity.
 
@@ -21,39 +20,41 @@ import java.util.List;
 
 @RestController
 public class JobController {
-  private List<Job> jobs = new ArrayList<>();
+  private JobService jobService;
+
+  public JobController(JobService jobService) {
+    this.jobService = jobService;
+  }
 
   @GetMapping("/jobs")
   public List<Job> getAllJobs() {
-    this.jobs = List.of(
-      new Job(1L, "Software Engineer", "Develops software applications", "Remote", "100000", "150000"),
-      new Job(2L, "Data Analyst", "Analyzes data", "Remote", "80000", "120000"),
-      new Job(3L, "Product Manager", "Manages product development", "Remote", "120000", "160000")
-    );
-    return this.jobs;
+    return jobService.findAll();
   }
 
   @GetMapping("/jobs/{id}")
   public Job getJobById(Long id) {
-    return null;
+    return jobService.findById(id);
   }
 
   @PostMapping("/jobs")
-  public Job createJob(Job job) {
-    return null;
+  public String createJob(@RequestBody Job job) {
+    jobService.create(job);
+    return "Job created successfully";
   }
 
   @PutMapping("/jobs/{id}")
-  public Job updateJob(Long id, Job job) {
-    return null;
+  public String updateJob(@PathVariable Long id, Job job) {
+    jobService.update(id, job);
+    return "Job with id: " + id + " updated successfully";
   }
 
   @DeleteMapping("/jobs/{id}")
-  public void deleteJob(Long id) {
+  public void deleteJob(@PathVariable Long id) {
+    jobService.delete(id);
   }
 
   @GetMapping("/jobs/{id}/company")
-  public String getCompanyByJobId(Long id) {
+  public String getCompanyByJobId(@PathVariable Long id) {
     return null;
   }
 }
