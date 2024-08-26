@@ -1,5 +1,7 @@
 package tech.atetheone.jobboard.job;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,30 +29,42 @@ public class JobController {
   }
 
   @GetMapping("/jobs")
-  public List<Job> getAllJobs() {
-    return jobService.findAll();
+  public ResponseEntity<List<Job>> getAllJobs() {
+    return ResponseEntity.ok(jobService.findAll());
   }
 
   @GetMapping("/jobs/{id}")
-  public Job getJobById(Long id) {
-    return jobService.findById(id);
+  public ResponseEntity<Job> getJobById(@PathVariable Long id) {
+    Job job = jobService.findById(id);
+    if (job == null) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(job);
   }
 
   @PostMapping("/jobs")
-  public String createJob(@RequestBody Job job) {
+  public ResponseEntity<String> createJob(@RequestBody Job job) {
     jobService.create(job);
-    return "Job created successfully";
+    return ResponseEntity.ok("Job created successfully");
   }
 
   @PutMapping("/jobs/{id}")
-  public String updateJob(@PathVariable Long id, Job job) {
-    jobService.update(id, job);
-    return "Job with id: " + id + " updated successfully";
+  public ResponseEntity<String> updateJob(@PathVariable Long id, @RequestBody Job updatedJob) {
+    boolean updated = jobService.update(id, updatedJob);
+    if (!updated) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    return ResponseEntity.ok("Job updated successfully");
   }
 
   @DeleteMapping("/jobs/{id}")
-  public void deleteJob(@PathVariable Long id) {
-    jobService.delete(id);
+  public ResponseEntity<String> deleteJob(@PathVariable Long id) {
+    boolean deleted = jobService.delete(id);
+
+    if (!deleted) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    return ResponseEntity.ok("Job deleted successfully");
   }
 
   @GetMapping("/jobs/{id}/company")
