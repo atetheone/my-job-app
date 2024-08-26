@@ -21,6 +21,7 @@ import java.util.List;
  */
 
 @RestController
+@RequestMapping("/jobs")
 public class JobController {
   private JobService jobService;
 
@@ -28,12 +29,19 @@ public class JobController {
     this.jobService = jobService;
   }
 
-  @GetMapping("/jobs")
+  @GetMapping
   public ResponseEntity<List<Job>> getAllJobs() {
     return ResponseEntity.ok(jobService.findAll());
   }
 
-  @GetMapping("/jobs/{id}")
+
+  @PostMapping
+  public ResponseEntity<String> createJob(@RequestBody Job job) {
+    jobService.create(job);
+    return ResponseEntity.ok("Job created successfully");
+  }
+
+  @GetMapping("/{id}")
   public ResponseEntity<Job> getJobById(@PathVariable Long id) {
     Job job = jobService.findById(id);
     if (job == null) {
@@ -42,13 +50,7 @@ public class JobController {
     return ResponseEntity.ok(job);
   }
 
-  @PostMapping("/jobs")
-  public ResponseEntity<String> createJob(@RequestBody Job job) {
-    jobService.create(job);
-    return ResponseEntity.ok("Job created successfully");
-  }
-
-  @PutMapping("/jobs/{id}")
+  @PutMapping("/{id}")
   public ResponseEntity<String> updateJob(@PathVariable Long id, @RequestBody Job updatedJob) {
     boolean updated = jobService.update(id, updatedJob);
     if (!updated) {
@@ -57,7 +59,7 @@ public class JobController {
     return ResponseEntity.ok("Job updated successfully");
   }
 
-  @DeleteMapping("/jobs/{id}")
+  @DeleteMapping("/{id}")
   public ResponseEntity<String> deleteJob(@PathVariable Long id) {
     boolean deleted = jobService.delete(id);
 
@@ -67,7 +69,7 @@ public class JobController {
     return ResponseEntity.ok("Job deleted successfully");
   }
 
-  @GetMapping("/jobs/{id}/company")
+  @GetMapping("/{id}/company")
   public String getCompanyByJobId(@PathVariable Long id) {
     return null;
   }
