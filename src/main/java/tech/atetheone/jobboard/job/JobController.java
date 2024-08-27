@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 /*
   * This class is a controller that handles HTTP requests for the Job entity.
 
@@ -42,10 +42,10 @@ public class JobController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Job> getJobById(@PathVariable Long id) {
-    Job job = jobService.findById(id);
-    if (job == null) {
-      return ResponseEntity.notFound().build();
+  public ResponseEntity<Optional<Job>> getJobById(@PathVariable Long id) {
+    Optional<Job> job = jobService.findById(id);
+    if (job.isEmpty()) {
+      return ResponseEntity.noContent().build();
     }
     return ResponseEntity.ok(job);
   }
