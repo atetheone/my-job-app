@@ -1,6 +1,7 @@
 package tech.atetheone.jobboard.job;
 
 import java.util.List;
+import java.util.Optional;
 
 /*
   * This interface defines the methods that the JobService class should implement.
@@ -12,8 +13,8 @@ import java.util.List;
  */
 public interface JobService {
   List<Job> findAll();
-  Job findById(Long id);
+  Optional<Job> findById(Long id);
   void create(Job job);
-  void update(Long id, Job job);
-  void delete(Long id);
+  boolean update(Long id, Job job);
+  boolean delete(Long id);
 }
