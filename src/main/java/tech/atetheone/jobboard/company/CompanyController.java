@@ -27,9 +27,9 @@ public class CompanyController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Optional<Company>> findCompanyById(@PathVariable Long id) {
-    Optional<Company> company = companyService.findCompanyById(id);
-    if (company.isEmpty()) {
+  public ResponseEntity<Company> findCompanyById(@PathVariable Long id) {
+    Company company = companyService.findCompanyById(id);
+    if (company == null) {
       return ResponseEntity.notFound().build();
     }
     return ResponseEntity.ok(company);
