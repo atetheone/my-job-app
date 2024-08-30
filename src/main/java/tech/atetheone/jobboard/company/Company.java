@@ -2,11 +2,14 @@ package tech.atetheone.jobboard.company;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
 import tech.atetheone.jobboard.job.Job;
+import tech.atetheone.jobboard.review.Review;
 
 import java.util.List;
 
 @Entity
+@Data
 public class Company {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,47 +21,7 @@ public class Company {
   @OneToMany(mappedBy = "company")
   private List<Job> jobs;
 
-  /*@OneToMany
-  private List<Review> reviews;*/
-
-  public Company() {
-  }
-
-  public Company(Long id, String name, String description) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public List<Job> getJobs() {
-    return jobs;
-  }
-
-  public void setJobs(List<Job> jobs) {
-    this.jobs = jobs;
-  }
+  @JsonIgnore
+  @OneToMany(mappedBy = "company")
+  private List<Review> reviews;
 }
