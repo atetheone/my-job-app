@@ -1,5 +1,6 @@
 package tech.atetheone.jobboard.review;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import tech.atetheone.jobboard.company.Company;
@@ -15,6 +16,7 @@ public class Review {
   private String description;
   private double rating;
 
+  @JsonIgnore
   @ManyToOne
   private Company company;
 }
